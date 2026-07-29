@@ -1,16 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Page Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Utils</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<h1>Welcome to text analyzer, enter your text below</h1>
-<form action='/analyze' method='get'>
-    <textarea name="text" style="width: 721px; height: 279px;" placeholder="Text goes here..."></textarea>
-    <br>
-    <input type="checkbox" name="remove_punctuations">Remove Punctuations
-    <br>
-    <button type="submit">Analyze Text</button>
-</form>
+
+<body class="bg-zinc-950 text-white min-h-screen flex items-center justify-center p-6">
+
+    <div class="w-full max-w-4xl">
+
+        <h1 class="text-4xl font-bold text-center">Text Utils</h1>
+
+        <p class="text-zinc-400 text-center mt-2 mb-6">
+            Paste your text and choose an operation.
+        </p>
+
+        <form action="/analyze" method="get">
+
+            <textarea
+                name="text"
+                placeholder="Type or paste your text here..."
+                class="w-full h-56 bg-zinc-900 border border-zinc-700 rounded-xl p-4 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            ></textarea>
+
+            <div class="flex flex-wrap gap-6 mt-6 text-sm">
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <span>Remove Punctuation</span>
+                    <div class="relative">
+                        <input type="checkbox" name="remove_punctuations" class="sr-only peer">
+                        <div class="w-10 h-5 bg-zinc-700 rounded-full peer-checked:bg-indigo-600 transition"></div>
+                        <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                    </div>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <span>Full Caps</span>
+                    <div class="relative">
+                        <input type="checkbox" name="full_caps" class="sr-only peer">
+                        <div class="w-10 h-5 bg-zinc-700 rounded-full peer-checked:bg-indigo-600 transition"></div>
+                        <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                    </div>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <span>Remove New Lines</span>
+                    <div class="relative">
+                        <input type="checkbox" name="newline_rem" class="sr-only peer">
+                        <div class="w-10 h-5 bg-zinc-700 rounded-full peer-checked:bg-indigo-600 transition"></div>
+                        <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                    </div>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <span>Remove Spaces</span>
+                    <div class="relative">
+                        <input type="checkbox" name="space_rem" class="sr-only peer">
+                        <div class="w-10 h-5 bg-zinc-700 rounded-full peer-checked:bg-indigo-600 transition"></div>
+                        <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                    </div>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <span>Count Characters</span>
+                    <div class="relative">
+                        <input type="checkbox" name="char_count" class="sr-only peer">
+                        <div class="w-10 h-5 bg-zinc-700 rounded-full peer-checked:bg-indigo-600 transition"></div>
+                        <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                    </div>
+                </label>
+
+            </div>
+
+            <button
+                type="submit"
+                class="mt-8 w-full bg-indigo-600 hover:bg-indigo-700 py-3 rounded-xl font-semibold transition"
+            >
+                Analyze Text
+            </button>
+
+        </form>
+
+    </div>
+
 </body>
 </html>
