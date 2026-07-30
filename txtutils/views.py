@@ -1,58 +1,84 @@
-from django.http import HttpResponse
 from django.shortcuts import render
 
+
 def index(request):
-    return render(request,"index.html")
+    return render(request, "index.html")
+
 
 def analyze(request):
-    dj_text = request.GET.get('text','default')
-    rem_punc = request.GET.get('remove_punctuations','off')
-    full_caps = request.GET.get('full_caps','off')
-    newline_rem = request.GET.get('newline_rem','off')
-    space_rem = request.GET.get('space_rem','off')
-    char_count = request.GET.get('char_count','off')
-    analyzed = ""
+    dj_text = request.POST.get("text", "")
 
-    if rem_punc == 'on' and len(dj_text != 0):
+    rem_punc = request.POST.get("remove_punctuations", "off")
+    full_caps = request.POST.get("full_caps", "off")
+    newline_rem = request.POST.get("newline_rem", "off")
+    space_rem = request.POST.get("space_rem", "off")
+    char_count = request.POST.get("char_count", "off")
+
+    if len(dj_text) == 0:
+        return render(request, "404.html")
+
+    analyzed = dj_text
+    purpose = []
+
+    if rem_punc == "on":
         punctuations = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
-        for char in dj_text:
+        analyzed_text = ""
+
+        for char in analyzed:
             if char not in punctuations:
-                analyzed += char
-        params = {'purpose':'Removed Punctuations','analyzed_text':analyzed}
-        return render(request,"analyze.html",params)
-     
-    if full_caps == "on" and len(dj_text != 0):
-        analyzed = dj_text.upper()
-        params = {'purpose':'Capitalize Full','analyzed_text':analyzed}
-        return render(request,"analyze.html",params)
+                analyzed_text += char
 
-    if newline_rem == "on" and len(dj_text != 0):
-        for char in dj_text:
+        analyzed = analyzed_text
+        purpose.append("Removed Punctuations")
+
+    if full_caps == "on":
+        analyzed = analyzed.upper()
+        purpose.append("Capitalized")
+
+    if newline_rem == "on":
+        analyzed_text = ""
+
+        for char in analyzed:
             if char != "\n" and char != "\r":
-                analyzed += char
-        params = {'purpose':'Remove New Lines','analyzed_text':analyzed}
-        return render(request,"analyze.html",params)
+                analyzed_text += char
 
-    if space_rem == "on" and len(dj_text != 0):
-        for index,char in enumerate(dj_text):
-            if dj_text[index] == " " and index != len(dj_text) - 1 and dj_text[index + 1] == " ":
-                pass
-            else:
-                analyzed += char
-        params = {'purpose':'Remove Unusual Spaces','analyzed_text':analyzed}
-        return render(request,'analyze.html',params)
+        analyzed = analyzed_text
+        purpose.append("Removed New Lines")
 
-    if char_count == "on" and len(dj_text != 0):
+    if space_rem == "on":
+        analyzed_text = ""
+
+        for index, char in enumerate(analyzed):
+            if (
+                char == " "
+                and index != len(analyzed) - 1
+                and analyzed[index + 1] == " "
+            ):
+                continue
+            analyzed_text += char
+
+        analyzed = analyzed_text
+        purpose.append("Removed Extra Spaces")
+
+    if char_count == "on":
         space_count = 0
-        for ch in dj_text:
-            if ch == " ":
-                space_count+=1
-            else:
-                pass
-        analyzed = f"there are total {len(dj_text)} characters including space and {space_count} spaces used"
-        params = {'purpose':'Count characters & spaces','analyzed_text':analyzed}
-        return render(request,'analyze.html',params)
 
-    else :
-        return render(request,'404.html')
+        for char in analyzed:
+            if char == " ":
+                space_count += 1
 
+        analyzed += (
+            f"\n\nTotal Characters: {len(analyzed)}"
+            f"\nTotal Spaces: {space_count}"
+        )
+        purpose.append("Character Count")
+
+    if len(purpose) == 0:
+        return render(request, "404.html")
+
+    params = {
+        "purpose": ", ".join(purpose),
+        "analyzed_text": analyzed
+    }
+
+    return render(request, "analyze.html", params)
