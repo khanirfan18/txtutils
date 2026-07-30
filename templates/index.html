@@ -17,7 +17,7 @@
             Paste your text and choose an operation.
         </p>
 
-        <form action="/analyze" method="get">
+        <form action="/analyze" method="POST"> {% csrf_token %}
 
             <textarea
                 name="text"
